@@ -45,7 +45,7 @@ final class AudioPlayerService: ObservableObject {
         MusicPlaylist(id: "original", displayName: "Original", trackIDs: originalTrackIDs),
         MusicPlaylist(id: "indian", displayName: "Indian", trackIDs: indianTrackIDs),
     ]
-    static let defaultPlaylistID = "full"
+    static let defaultPlaylistID = "original"
 
     static func playlist(id: String) -> MusicPlaylist {
         playlists.first(where: { $0.id == id }) ?? playlists[0]
