@@ -36,5 +36,8 @@ struct RootView: View {
         .onChange(of: settings.musicEnabled) { _, enabled in
             audio.setEnabled(enabled)
         }
+        .onChange(of: settings.selectedTrackID) { _, _ in
+            audio.applyTrackSelection(settings)
+        }
     }
 }

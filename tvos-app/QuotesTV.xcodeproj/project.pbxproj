@@ -40,7 +40,7 @@
 		2F7C8314D6D9BB2E074F1776 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				005F011AB868A62E5CADA492 /* QuotesTV.app */,
+				005F011AB868A62E5CADA492 /* Quiet Quotes.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,7 +100,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3277508BA4EE90105BB963A8 /* QuotesTV */,
+				3277508BA4EE90105BB963A8 /* Quiet Quotes */,
 			);
 		};
 /* End PBXProject section */

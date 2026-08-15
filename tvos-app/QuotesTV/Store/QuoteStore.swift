@@ -39,6 +39,12 @@ final class QuoteStore: ObservableObject {
             .sink { [weak self] _ in self?.scheduleTimer() }
             .store(in: &cancellables)
 
+        settings.$useUniverseBackgrounds
+            .removeDuplicates()
+            .dropFirst()
+            .sink { [weak self] _ in self?.refreshBackground() }
+            .store(in: &cancellables)
+
         restart()
     }
 
@@ -69,7 +75,7 @@ final class QuoteStore: ObservableObject {
             bag = filteredQuotes().shuffled()
         }
         currentQuote = bag.popLast()
-        currentImageName = BackgroundImageCatalog.imageName(for: currentQuote)
+        refreshBackground()
 
         if let quote = currentQuote {
             history.insert(HistoryEntry(quote: quote, shownAt: Date()), at: 0)
@@ -77,6 +83,13 @@ final class QuoteStore: ObservableObject {
                 history.removeLast(history.count - Self.historyLimit)
             }
         }
+    }
+
+    private func refreshBackground() {
+        currentImageName = BackgroundImageCatalog.imageName(
+            for: currentQuote,
+            useUniverseBackgrounds: settings.useUniverseBackgrounds
+        )
     }
 
     private func scheduleTimer() {

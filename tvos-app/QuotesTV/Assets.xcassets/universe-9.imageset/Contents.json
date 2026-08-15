@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "universe-9.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

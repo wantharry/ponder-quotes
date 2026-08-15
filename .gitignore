@@ -7,3 +7,4 @@ build/
 # Raw scraped source data — not for version control (see tvos-app/README.md).
 # Kept locally as a personal reference only.
 tvos-app/sampleallphilosophies-v1.txt
+tvos-app/kaggle/

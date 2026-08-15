@@ -1,12 +1,8 @@
 import Foundation
 
-/// Maps each topic to the bundled background image asset names for that mood.
-///
-/// These asset names don't ship with any actual images — add photos to
-/// Assets.xcassets under these exact names (see tvos-app/README.md for
-/// sourcing suggestions). Topics with no matching images fall back to
-/// `general`, so the app still runs (with a plain gradient) before any
-/// images are added.
+/// Maps each topic to the bundled background image asset names for that mood,
+/// plus a real-photography "universe" pool (NASA imagery, public domain) that
+/// can override the generated topic art when enabled in Settings.
 enum BackgroundImageCatalog {
     private static let imagesByTopic: [String: [String]] = [
         "motivation": ["bg-motivation-1", "bg-motivation-2", "bg-motivation-3"],
@@ -27,7 +23,12 @@ enum BackgroundImageCatalog {
 
     private static let fallback = ["bg-general-1", "bg-general-2", "bg-general-3"]
 
-    static func imageName(for quote: Quote?) -> String? {
+    private static let universePool = (1...14).map { "universe-\($0)" }
+
+    static func imageName(for quote: Quote?, useUniverseBackgrounds: Bool = false) -> String? {
+        if useUniverseBackgrounds {
+            return universePool.randomElement()
+        }
         let topic = quote?.topics.first ?? ""
         let pool = imagesByTopic[topic] ?? fallback
         return pool.randomElement()
