@@ -25,6 +25,10 @@ struct SettingsView: View {
                     .pickerStyle(.inline)
                 }
 
+                Section("Display") {
+                    Toggle("Show clock", isOn: $settings.showClock)
+                }
+
                 Section {
                     Toggle("Background music", isOn: $settings.musicEnabled)
                 } header: {
