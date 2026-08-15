@@ -35,13 +35,13 @@ QuotesTV/
     DisplayView.swift   — the fullscreen quote + background + crossfade
     SettingsView.swift  — topic / frequency / music picker (Play/Pause opens it)
   Data/
-    quotes.json          — 249 curated, real, attributed quotes across 14 topics.
-                            Hand-picked in batches (not bulk-scraped — see note below),
-                            spanning classical philosophy (Aristotle, Plato, Socrates,
-                            Marcus Aurelius, Kant, Descartes, Nietzsche, Seneca,
-                            Epictetus), historical figures (Lincoln, Franklin, Jefferson,
-                            Douglass, Susan B. Anthony, Helen Keller, Booker T.
-                            Washington), and more.
+    quotes.json          — 362 curated, real, attributed quotes across 14 topics, from
+                            136 authors. Hand-picked in batches (not bulk-scraped — see
+                            note below), spanning classical philosophy (Aristotle, Plato,
+                            Socrates, Marcus Aurelius, Seneca, Epictetus), Enlightenment
+                            thinkers (Rousseau, Mill, Spinoza, Paine), literature (Dante,
+                            Goethe, Austen, Blake), and historical reformers/statesmen
+                            (Lincoln, Douglass, Sojourner Truth, Susan B. Anthony).
   Assets.xcassets/        — app icon, top shelf image, accent color (placeholder art —
                              solid navy/indigo/gold layers, see below to replace)
 ```
