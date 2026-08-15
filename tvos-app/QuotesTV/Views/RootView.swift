@@ -34,10 +34,13 @@ struct RootView: View {
             audio.syncWithSettings(settings)
         }
         .onChange(of: settings.musicEnabled) { _, enabled in
-            audio.setEnabled(enabled)
+            audio.setEnabled(enabled, settings: settings)
         }
         .onChange(of: settings.selectedTrackID) { _, _ in
-            audio.applyTrackSelection(settings)
+            audio.applySelection(settings)
+        }
+        .onChange(of: settings.selectedPlaylistID) { _, _ in
+            audio.applySelection(settings)
         }
     }
 }

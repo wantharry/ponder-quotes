@@ -22,6 +22,10 @@ final class AppSettings: ObservableObject {
     @Published var selectedTrackID: String {
         didSet { UserDefaults.standard.set(selectedTrackID, forKey: Keys.selectedTrack) }
     }
+    /// Which `MusicPlaylist` shuffle draws from — see `AudioPlayerService.playlists`.
+    @Published var selectedPlaylistID: String {
+        didSet { UserDefaults.standard.set(selectedPlaylistID, forKey: Keys.selectedPlaylist) }
+    }
 
     private enum Keys {
         static let topic = "quotestv.topic"
@@ -30,6 +34,7 @@ final class AppSettings: ObservableObject {
         static let clock = "quotestv.showClock"
         static let universe = "quotestv.useUniverseBackgrounds"
         static let selectedTrack = "quotestv.selectedTrackID"
+        static let selectedPlaylist = "quotestv.selectedPlaylistID"
     }
 
     init() {
@@ -41,5 +46,6 @@ final class AppSettings: ObservableObject {
         showClock = defaults.object(forKey: Keys.clock) as? Bool ?? true
         useUniverseBackgrounds = defaults.object(forKey: Keys.universe) as? Bool ?? false
         selectedTrackID = defaults.string(forKey: Keys.selectedTrack) ?? ""
+        selectedPlaylistID = defaults.string(forKey: Keys.selectedPlaylist) ?? AudioPlayerService.defaultPlaylistID
     }
 }

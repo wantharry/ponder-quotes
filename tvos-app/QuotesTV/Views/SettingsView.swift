@@ -43,9 +43,15 @@ struct SettingsView: View {
 
                 Section {
                     Toggle("Background music", isOn: $settings.musicEnabled)
+                    Picker("Playlist", selection: $settings.selectedPlaylistID) {
+                        ForEach(AudioPlayerService.playlists) { playlist in
+                            Text(playlist.displayName).tag(playlist.id)
+                        }
+                    }
+                    .pickerStyle(.inline)
                     Picker("Track", selection: $settings.selectedTrackID) {
                         Text("Shuffle").tag(AudioPlayerService.shuffleID)
-                        ForEach(AudioPlayerService.availableTracks) { track in
+                        ForEach(AudioPlayerService.tracks(in: AudioPlayerService.playlist(id: settings.selectedPlaylistID))) { track in
                             Text(track.displayName).tag(track.id)
                         }
                     }
