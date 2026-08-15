@@ -59,12 +59,19 @@ struct DisplayView: View {
     @ViewBuilder
     private var background: some View {
         if let imageName = store.currentImageName, let uiImage = UIImage(named: imageName) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .id(imageName)
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 2.5), value: store.currentImageName)
+            // GeometryReader forces an exact pixel frame — `.frame(maxWidth: .infinity,
+            // maxHeight: .infinity)` alone left portrait/odd-aspect source photos
+            // pillarboxed instead of actually resizing to cover the screen.
+            GeometryReader { geo in
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .clipped()
+            }
+            .id(imageName)
+            .transition(.opacity)
+            .animation(.easeInOut(duration: 2.5), value: store.currentImageName)
         } else {
             LinearGradient(
                 colors: [Color(red: 0.05, green: 0.05, blue: 0.12), Color(red: 0.15, green: 0.1, blue: 0.25)],
