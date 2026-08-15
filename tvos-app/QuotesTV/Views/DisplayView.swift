@@ -4,14 +4,20 @@ struct DisplayView: View {
     @ObservedObject var store: QuoteStore
     @EnvironmentObject var settings: AppSettings
 
-    @State private var isZoomedIn = false
+    @State private var kenBurnsScale: CGFloat = 1.0
+    @State private var kenBurnsOffset: CGSize = .zero
+
+    private static let zoomedInScale: CGFloat = 1.15
+    private static let panDistance: CGFloat = 70
+    private static let panAngles: [Double] = [0, 45, 90, 135, 180, 225, 270, 315]
 
     var body: some View {
         ZStack {
             background
-                .scaleEffect(isZoomedIn ? 1.08 : 1.0)
-                .animation(.easeInOut(duration: 14).repeatForever(autoreverses: true), value: isZoomedIn)
-                .onAppear { isZoomedIn = true }
+                .scaleEffect(kenBurnsScale)
+                .offset(kenBurnsOffset)
+                .onAppear { startKenBurns() }
+                .onChange(of: store.currentImageName) { _, _ in startKenBurns() }
 
             LinearGradient(
                 colors: [.black.opacity(0.15), .black.opacity(0.55)],
@@ -54,6 +60,26 @@ struct DisplayView: View {
             }
         }
         .ignoresSafeArea()
+    }
+
+    /// Classic Ken Burns treatment: each image randomly zooms in or out while
+    /// drifting toward a random direction, so consecutive images don't repeat
+    /// the same motion. Snaps back to a fresh starting state instantly, then
+    /// animates — the crossfade in `background` masks the snap.
+    private func startKenBurns() {
+        let zoomingIn = Bool.random()
+        let angle = Self.panAngles.randomElement() ?? 0
+        let radians = angle * .pi / 180
+        let dx = Self.panDistance * cos(radians)
+        let dy = Self.panDistance * sin(radians)
+
+        kenBurnsScale = zoomingIn ? 1.0 : Self.zoomedInScale
+        kenBurnsOffset = .zero
+
+        withAnimation(.easeInOut(duration: 18)) {
+            kenBurnsScale = zoomingIn ? Self.zoomedInScale : 1.0
+            kenBurnsOffset = CGSize(width: dx, height: dy)
+        }
     }
 
     @ViewBuilder
