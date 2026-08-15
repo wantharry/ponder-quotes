@@ -35,10 +35,13 @@ QuotesTV/
     DisplayView.swift   — the fullscreen quote + background + crossfade
     SettingsView.swift  — topic / frequency / music picker (Play/Pause opens it)
   Data/
-    quotes.json          — 178 curated, real, attributed quotes across 14 topics
-                            (112 original + 66 classical philosophy quotes: Aristotle,
-                            Plato, Socrates, Marcus Aurelius, Kant, Descartes, Nietzsche,
-                            Gandhi, Ayn Rand)
+    quotes.json          — 249 curated, real, attributed quotes across 14 topics.
+                            Hand-picked in batches (not bulk-scraped — see note below),
+                            spanning classical philosophy (Aristotle, Plato, Socrates,
+                            Marcus Aurelius, Kant, Descartes, Nietzsche, Seneca,
+                            Epictetus), historical figures (Lincoln, Franklin, Jefferson,
+                            Douglass, Susan B. Anthony, Helen Keller, Booker T.
+                            Washington), and more.
   Assets.xcassets/        — app icon, top shelf image, accent color (placeholder art —
                              solid navy/indigo/gold layers, see below to replace)
 ```
@@ -98,3 +101,22 @@ seamless-looping so the 10s–3min quote rotation doesn't make the loop point ob
 `Data/quotes.json` is a flat array of `{ id, text, author, topics: [...] }`. Topics must be
 one of the slugs in `Models/Topic.swift`. To add a topic, add a case there and matching
 image names in `BackgroundImageCatalog.swift`.
+
+### Why these are hand-picked, not bulk-scraped
+
+Two automated approaches were tried and rejected for quality/rights reasons, in case this
+ever comes up again:
+- A large Goodreads scrape (`sampleallphilosophies-v1.txt`, gitignored, kept locally only)
+  — much of it is verbatim from specific in-copyright translated editions, not the
+  public-domain original text.
+- A Wikiquote API pull (openly CC BY-SA licensed, so licensing wasn't the blocker) —
+  filtering to safe public-domain authors still left the batch full of things that don't
+  work as standalone quotes: near-complete poem reproductions, out-of-context personal
+  correspondence, literal scientific descriptions, and awkward machine-literal
+  translations.
+
+Every quote currently in `quotes.json` was individually selected and verified instead,
+which is slower but keeps the bar at "actually good and actually attributed correctly."
+New quotes should follow the same standard — pick real, well-documented ones (watch for
+commonly-misattributed "famous quotes" that don't hold up), not raw extraction from a
+bulk source.
