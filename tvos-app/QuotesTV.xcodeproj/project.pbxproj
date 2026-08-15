@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		005F011AB868A62E5CADA492 /* QuotesTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuotesTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		005F011AB868A62E5CADA492 /* Quiet Quotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quiet Quotes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3277508BA4EE90105BB963A8 /* QuotesTV */ = {
+		3277508BA4EE90105BB963A8 /* Quiet Quotes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F907F85EC900CEA127445041 /* Build configuration list for PBXNativeTarget "QuotesTV" */;
+			buildConfigurationList = F907F85EC900CEA127445041 /* Build configuration list for PBXNativeTarget "Quiet Quotes" */;
 			buildPhases = (
 				5FC368FEB5F44B5979D0D28A /* Sources */,
 				04994772C3CF38809CCE3BAC /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				008B2B082DF526EE34B714B0 /* QuotesTV */,
 			);
-			name = QuotesTV;
+			name = "Quiet Quotes";
 			packageProductDependencies = (
 			);
-			productName = QuotesTV;
-			productReference = 005F011AB868A62E5CADA492 /* QuotesTV.app */;
+			productName = "Quiet Quotes";
+			productReference = 005F011AB868A62E5CADA492 /* Quiet Quotes.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -322,7 +322,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F907F85EC900CEA127445041 /* Build configuration list for PBXNativeTarget "QuotesTV" */ = {
+		F907F85EC900CEA127445041 /* Build configuration list for PBXNativeTarget "Quiet Quotes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A978D945FABFED599618556E /* Debug */,
