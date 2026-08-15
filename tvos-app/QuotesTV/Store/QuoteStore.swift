@@ -1,12 +1,21 @@
 import Foundation
 import Combine
 
+struct HistoryEntry: Identifiable {
+    let id = UUID()
+    let quote: Quote
+    let shownAt: Date
+}
+
 /// Loads the bundled quote deck, filters it by the selected topic, and rotates
 /// through it on a timer using a shuffle-bag (so a quote can't repeat until
 /// every other quote in the current filter has been shown).
 final class QuoteStore: ObservableObject {
     @Published private(set) var currentQuote: Quote?
     @Published private(set) var currentImageName: String?
+    @Published private(set) var history: [HistoryEntry] = []
+
+    private static let historyLimit = 50
 
     private var allQuotes: [Quote] = []
     private var bag: [Quote] = []
@@ -61,6 +70,13 @@ final class QuoteStore: ObservableObject {
         }
         currentQuote = bag.popLast()
         currentImageName = BackgroundImageCatalog.imageName(for: currentQuote)
+
+        if let quote = currentQuote {
+            history.insert(HistoryEntry(quote: quote, shownAt: Date()), at: 0)
+            if history.count > Self.historyLimit {
+                history.removeLast(history.count - Self.historyLimit)
+            }
+        }
     }
 
     private func scheduleTimer() {

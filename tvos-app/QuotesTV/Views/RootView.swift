@@ -17,7 +17,7 @@ struct RootView: View {
             // on an ambient display, so it doubles as "open settings".
             .onPlayPauseCommand { showSettings = true }
             .sheet(isPresented: $showSettings) {
-                SettingsView()
+                SettingsView(store: store)
             }
             .onAppear {
                 // Quotes are the show here — don't let tvOS's screensaver

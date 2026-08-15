@@ -2,11 +2,18 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settings: AppSettings
+    @ObservedObject var store: QuoteStore
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    NavigationLink("Quote History") {
+                        HistoryView(store: store)
+                    }
+                }
+
                 Section("Topic") {
                     Picker("Topic", selection: $settings.topic) {
                         ForEach(Topic.allCases) { topic in
