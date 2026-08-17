@@ -5,6 +5,14 @@ struct SettingsView: View {
     @ObservedObject var store: QuoteStore
     @Environment(\.dismiss) private var dismiss
 
+    private var currentTrackLabel: String {
+        if settings.selectedTrackID == AudioPlayerService.shuffleID {
+            return "Shuffle"
+        }
+        return AudioPlayerService.availableTracks
+            .first(where: { $0.id == settings.selectedTrackID })?.displayName ?? "Shuffle"
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -14,22 +22,36 @@ struct SettingsView: View {
                     }
                 }
 
-                Section("Topic") {
-                    Picker("Topic", selection: $settings.topic) {
-                        ForEach(Topic.allCases) { topic in
-                            Text(topic.displayName).tag(topic)
-                        }
+                Section("Playback") {
+                    NavigationLink {
+                        SettingsOptionList(
+                            title: "Topic",
+                            options: Topic.allCases.map { ($0, $0.displayName) },
+                            selection: $settings.topic
+                        )
+                    } label: {
+                        SettingsValueRow(title: "Topic", value: settings.topic.displayName)
                     }
-                    .pickerStyle(.inline)
-                }
 
-                Section("Change quote every") {
-                    Picker("Frequency", selection: $settings.frequency) {
-                        ForEach(RotationFrequency.allCases) { frequency in
-                            Text(frequency.label).tag(frequency)
-                        }
+                    NavigationLink {
+                        SettingsOptionList(
+                            title: "Authors",
+                            options: AuthorTier.allCases.map { ($0, $0.label) },
+                            selection: $settings.authorTier
+                        )
+                    } label: {
+                        SettingsValueRow(title: "Authors", value: settings.authorTier.label)
                     }
-                    .pickerStyle(.inline)
+
+                    NavigationLink {
+                        SettingsOptionList(
+                            title: "Change quote every",
+                            options: RotationFrequency.allCases.map { ($0, $0.label) },
+                            selection: $settings.frequency
+                        )
+                    } label: {
+                        SettingsValueRow(title: "Change quote every", value: settings.frequency.label)
+                    }
                 }
 
                 Section {
@@ -43,19 +65,31 @@ struct SettingsView: View {
 
                 Section {
                     Toggle("Background music", isOn: $settings.musicEnabled)
-                    Picker("Playlist", selection: $settings.selectedPlaylistID) {
-                        ForEach(AudioPlayerService.playlists) { playlist in
-                            Text(playlist.displayName).tag(playlist.id)
-                        }
+
+                    NavigationLink {
+                        SettingsOptionList(
+                            title: "Playlist",
+                            options: AudioPlayerService.playlists.map { ($0.id, $0.displayName) },
+                            selection: $settings.selectedPlaylistID
+                        )
+                    } label: {
+                        SettingsValueRow(
+                            title: "Playlist",
+                            value: AudioPlayerService.playlist(id: settings.selectedPlaylistID).displayName
+                        )
                     }
-                    .pickerStyle(.inline)
-                    Picker("Track", selection: $settings.selectedTrackID) {
-                        Text("Shuffle").tag(AudioPlayerService.shuffleID)
-                        ForEach(AudioPlayerService.tracks(in: AudioPlayerService.playlist(id: settings.selectedPlaylistID))) { track in
-                            Text(track.displayName).tag(track.id)
-                        }
+
+                    NavigationLink {
+                        SettingsOptionList(
+                            title: "Track",
+                            options: [(AudioPlayerService.shuffleID, "Shuffle")]
+                                + AudioPlayerService.tracks(in: AudioPlayerService.playlist(id: settings.selectedPlaylistID))
+                                    .map { ($0.id, $0.displayName) },
+                            selection: $settings.selectedTrackID
+                        )
+                    } label: {
+                        SettingsValueRow(title: "Track", value: currentTrackLabel)
                     }
-                    .pickerStyle(.inline)
                 } header: {
                     Text("Music")
                 } footer: {
@@ -69,5 +103,50 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+/// A settings row showing the current value of a setting, tapped to drill into `SettingsOptionList`.
+private struct SettingsValueRow: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+/// A single-selection list, pushed from a `SettingsValueRow`. Shows a checkmark on the
+/// selected option and pops back to Settings as soon as a new one is chosen.
+private struct SettingsOptionList<Value: Hashable>: View {
+    let title: String
+    let options: [(value: Value, label: String)]
+    @Binding var selection: Value
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        List {
+            ForEach(options, id: \.value) { option in
+                Button {
+                    selection = option.value
+                    dismiss()
+                } label: {
+                    HStack {
+                        Text(option.label)
+                        Spacer()
+                        if option.value == selection {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(.tint)
+                        }
+                    }
+                }
+            }
+        }
+        .navigationTitle(title)
     }
 }

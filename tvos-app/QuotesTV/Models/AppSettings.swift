@@ -9,6 +9,9 @@ final class AppSettings: ObservableObject {
     @Published var frequency: RotationFrequency {
         didSet { UserDefaults.standard.set(frequency.rawValue, forKey: Keys.frequency) }
     }
+    @Published var authorTier: AuthorTier {
+        didSet { UserDefaults.standard.set(authorTier.rawValue, forKey: Keys.authorTier) }
+    }
     @Published var musicEnabled: Bool {
         didSet { UserDefaults.standard.set(musicEnabled, forKey: Keys.music) }
     }
@@ -30,6 +33,7 @@ final class AppSettings: ObservableObject {
     private enum Keys {
         static let topic = "quotestv.topic"
         static let frequency = "quotestv.frequency"
+        static let authorTier = "quotestv.authorTier"
         static let music = "quotestv.musicEnabled"
         static let clock = "quotestv.showClock"
         static let universe = "quotestv.useUniverseBackgrounds"
@@ -42,6 +46,8 @@ final class AppSettings: ObservableObject {
         topic = Topic(rawValue: defaults.string(forKey: Keys.topic) ?? "") ?? .all
         let storedFrequency = defaults.object(forKey: Keys.frequency) as? Double
         frequency = RotationFrequency(rawValue: storedFrequency ?? RotationFrequency.medium.rawValue) ?? .medium
+        let storedAuthorTier = defaults.object(forKey: Keys.authorTier) as? Int
+        authorTier = AuthorTier(rawValue: storedAuthorTier ?? AuthorTier.top50.rawValue) ?? .top50
         musicEnabled = defaults.object(forKey: Keys.music) as? Bool ?? true
         showClock = defaults.object(forKey: Keys.clock) as? Bool ?? true
         useUniverseBackgrounds = defaults.object(forKey: Keys.universe) as? Bool ?? false
