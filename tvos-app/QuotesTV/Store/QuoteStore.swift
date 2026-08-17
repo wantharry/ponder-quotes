@@ -83,14 +83,24 @@ final class QuoteStore: ObservableObject {
     }
 
     private func restart() {
-        bag = filteredQuotes().shuffled()
+        reshuffleBag()
         advance()
         scheduleTimer()
     }
 
+    /// Shuffles a fresh bag from the current filter, guarding against the shuffle
+    /// landing the quote we just showed back at the end (about to be popped next) —
+    /// so a cycle boundary or a filter change never repeats the same quote twice in a row.
+    private func reshuffleBag() {
+        bag = filteredQuotes().shuffled()
+        if bag.count > 1, bag.last?.id == currentQuote?.id {
+            bag.swapAt(bag.count - 1, Int.random(in: 0..<bag.count - 1))
+        }
+    }
+
     private func advance() {
         if bag.isEmpty {
-            bag = filteredQuotes().shuffled()
+            reshuffleBag()
         }
         currentQuote = bag.popLast()
         refreshBackground()
