@@ -6,5 +6,7 @@ struct Quote: Identifiable, Codable, Hashable {
     let author: String
     /// 1 = most globally recognizable author, 200 = least. Backs the "Authors" tier filter in Settings.
     let authorRank: Int
+    /// Matches `AuthorField.rawValue` — backs the "Field" filter in Settings.
+    let field: String
     let topics: [String]
 }

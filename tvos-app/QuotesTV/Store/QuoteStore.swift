@@ -39,6 +39,12 @@ final class QuoteStore: ObservableObject {
             .sink { [weak self] _ in self?.restart() }
             .store(in: &cancellables)
 
+        settings.$authorField
+            .removeDuplicates()
+            .dropFirst()
+            .sink { [weak self] _ in self?.restart() }
+            .store(in: &cancellables)
+
         settings.$frequency
             .removeDuplicates()
             .dropFirst()
@@ -66,9 +72,14 @@ final class QuoteStore: ObservableObject {
     }
 
     private func filteredQuotes() -> [Quote] {
-        let byAuthor = allQuotes.filter { $0.authorRank <= settings.authorTier.rawValue }
-        guard settings.topic != .all else { return byAuthor }
-        return byAuthor.filter { $0.topics.contains(settings.topic.rawValue) }
+        var quotes = allQuotes.filter { $0.authorRank <= settings.authorTier.rawValue }
+        if settings.authorField != .all {
+            quotes = quotes.filter { $0.field == settings.authorField.rawValue }
+        }
+        if settings.topic != .all {
+            quotes = quotes.filter { $0.topics.contains(settings.topic.rawValue) }
+        }
+        return quotes
     }
 
     private func restart() {

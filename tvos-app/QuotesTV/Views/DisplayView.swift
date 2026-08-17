@@ -72,13 +72,18 @@ struct DisplayView: View {
         let radians = angle * .pi / 180
         let dx = Self.panDistance * cos(radians)
         let dy = Self.panDistance * sin(radians)
+        let pannedOffset = CGSize(width: dx, height: dy)
 
+        // The background is scaled to exactly cover the screen at 1.0, so that scale has
+        // zero margin to pan within — only the zoomed-in scale has room to spare. Always
+        // pair the offset with the zoomed-in end, whichever side of the animation it's on,
+        // or panning at the 1.0 end exposes a gap past the image's edge.
         kenBurnsScale = zoomingIn ? 1.0 : Self.zoomedInScale
-        kenBurnsOffset = .zero
+        kenBurnsOffset = zoomingIn ? .zero : pannedOffset
 
         withAnimation(.easeInOut(duration: 18)) {
             kenBurnsScale = zoomingIn ? Self.zoomedInScale : 1.0
-            kenBurnsOffset = CGSize(width: dx, height: dy)
+            kenBurnsOffset = zoomingIn ? pannedOffset : .zero
         }
     }
 

@@ -35,6 +35,16 @@ struct SettingsView: View {
 
                     NavigationLink {
                         SettingsOptionList(
+                            title: "Field",
+                            options: AuthorField.allCases.map { ($0, $0.displayName) },
+                            selection: $settings.authorField
+                        )
+                    } label: {
+                        SettingsValueRow(title: "Field", value: settings.authorField.displayName)
+                    }
+
+                    NavigationLink {
+                        SettingsOptionList(
                             title: "Authors",
                             options: AuthorTier.allCases.map { ($0, $0.label) },
                             selection: $settings.authorTier
